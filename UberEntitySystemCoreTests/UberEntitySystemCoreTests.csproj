@@ -55,9 +55,11 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="HandleTests.cs" />
-    <Compile Include="EntityTests.cs" />
+    <Compile Include="Tutorial 1\HandleTests.cs" />
+    <Compile Include="Tutorial 1\EntityTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tutorial 2\FactorysTest.cs" />
+    <Compile Include="Tutorial 2\FactoryTestObj.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
