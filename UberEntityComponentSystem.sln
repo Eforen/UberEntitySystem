@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UberEntityComponentSystem", "UberEntityComponentSystem\UberEntityComponentSystem.csproj", "{4887851B-1DCF-445F-A104-A993D60F4C80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UberEntityComponentSystemTests", "UberEntityComponentSystemTests\UberEntityComponentSystemTests.csproj", "{DEDCB319-C56B-45D6-9531-21B14C28FF11}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4887851B-1DCF-445F-A104-A993D60F4C80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4887851B-1DCF-445F-A104-A993D60F4C80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4887851B-1DCF-445F-A104-A993D60F4C80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4887851B-1DCF-445F-A104-A993D60F4C80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEDCB319-C56B-45D6-9531-21B14C28FF11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDCB319-C56B-45D6-9531-21B14C28FF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDCB319-C56B-45D6-9531-21B14C28FF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEDCB319-C56B-45D6-9531-21B14C28FF11}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

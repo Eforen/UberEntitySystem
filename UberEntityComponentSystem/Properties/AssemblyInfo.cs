@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("UberEntitySystemCore")]
+[assembly: AssemblyTitle("UberEntityComponentSystem")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("UberEntitySystemCore")]
+[assembly: AssemblyProduct("UberEntityComponentSystem")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6ca1034b-4f7a-4e39-9d99-ef710ca58e43")]
+[assembly: Guid("4887851b-1dcf-445f-a104-a993d60f4c80")]
 
 // Version information for an assembly consists of the following four values:
 //
