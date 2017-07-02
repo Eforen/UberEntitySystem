@@ -15,7 +15,7 @@ namespace UberEntitySystemCore
         /// by creating tons of handles instead we give a ref to the same one out as long
         /// as its still in phase with this entity.
         /// </summary>
-        public Handle _handle;
+        protected Handle _handle;
 
         /// <summary>
         /// Get current handle for this Entity.

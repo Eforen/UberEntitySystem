@@ -36,10 +36,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComponentInfo.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="FactoryAttribute.cs" />
     <Compile Include="Handle.cs" />
+    <Compile Include="IComponent.cs" />
     <Compile Include="IObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
