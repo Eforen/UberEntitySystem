@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UberEntitySystemCore;
 
 namespace UberEntitySystemCoreTests.Tutorial_3
 {
@@ -14,8 +15,9 @@ namespace UberEntitySystemCoreTests.Tutorial_3
     public class Component2 : IComponent { }
     public class Component3 : IComponent { }
     public class Component4 : IComponent { }
+    public class NotComponent { }
 
-    [TestClass]
+    [TestFixture]
     public class ComponentInfoTests
     {
         [Test]
@@ -56,6 +58,16 @@ namespace UberEntitySystemCoreTests.Tutorial_3
             Assert.AreNotEqual(c2, c4);
 
             Assert.AreNotEqual(c3, c4);
+        }
+
+        [Test]
+        public void GetIdDynamicThrowErrorForNoncomponent()
+        {
+            //Test
+            Assert.Throws(
+                typeof(KeyNotFoundException),
+                () => { ComponentInfo.getID(typeof(NotComponent)); }
+            );
         }
 
 
@@ -118,13 +130,13 @@ namespace UberEntitySystemCoreTests.Tutorial_3
             foreach(KeyValuePair<int, Type> pair in export)
             {
                 if (pair.Value == typeof(Component1))
-                    Assert.AreEqual(c1, typeof(Component1));
+                    Assert.AreEqual(c1, ComponentInfo.getID<Component1>());
                 if (pair.Value == typeof(Component2))
-                    Assert.AreEqual(c2, typeof(Component2));
+                    Assert.AreEqual(c2, ComponentInfo.getID<Component2>());
                 if (pair.Value == typeof(Component3))
-                    Assert.AreEqual(c3, typeof(Component3));
+                    Assert.AreEqual(c3, ComponentInfo.getID<Component3>());
                 if (pair.Value == typeof(Component4))
-                    Assert.AreEqual(c4, typeof(Component4));
+                    Assert.AreEqual(c4, ComponentInfo.getID<Component4>());
             }
         }
 
