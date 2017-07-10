@@ -15,16 +15,16 @@ namespace UberEntitySystemCoreTests.Tutorial_2
         public string currentString = "";
     }
 
-    class FactoryTestObjFactory : IObjectFactory<FactoryTestObj>
+    class FactoryTestObjFactory : ObjectFactory<FactoryTestObj>
     {
-        public FactoryTestObj CleanForReuse(FactoryTestObj obj)
+        public override FactoryTestObj CleanForReuse(FactoryTestObj obj)
         {
             obj.currentID = 0;
             obj.currentString = "";
             return obj;
         }
 
-        public FactoryTestObj CreateNew()
+        public override FactoryTestObj CreateNew()
         {
             return new FactoryTestObj();
         }
