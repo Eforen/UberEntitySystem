@@ -58,6 +58,22 @@ namespace UberEntityComponentSystemTests
             return new FactoryTestObj2();
         }
     }
+    
+    [Factory(typeof(FactoryTestExploaderFactory), typeof(FactoryTestExploader))]
+    class FactoryTestExploader {}
+
+    class FactoryTestExploaderFactory : ObjectFactory<FactoryTestExploader>
+    {
+        public override FactoryTestExploader CleanForReuse(FactoryTestExploader obj)
+        {
+            throw new FactoryTestObjTesterCleanForReuseCalled(); //Prove the method was called
+        }
+
+        public override FactoryTestExploader CreateNew()
+        {
+            throw new FactoryTestObjTesterCreateNewCalled(); //Prove the method was called
+        }
+    }
 
     [TestClass()]
     public class FactoryTests
@@ -71,6 +87,24 @@ namespace UberEntityComponentSystemTests
 
         #region Generic Methods
 
+        [Test]
+        public void FactoryCleanerCalled()
+        {
+            Assert.Throws<FactoryTestObjTesterCleanForReuseCalled>(
+                () => Factory.Cache(new FactoryTestExploader()), "Factory Cleaner not called.");
+        }
+        [Test]
+        public void FactoryCreateNewCalled()
+        {
+            Assert.Throws<FactoryTestObjTesterCreateNewCalled>(
+                () => Factory.Get<FactoryTestExploader>(), "Factory CreateNew not called.");
+        }
+        [Test]
+        public void FactoryMethodCreateNewCalled()
+        {
+            Assert.Throws<FactoryTestObjTesterCreateNewCalled>(
+                () => Factory.Get(typeof(FactoryTestExploader)), "Factory CreateNew not called.");
+        }
 
         [Test]
         public void InstantiationTest()

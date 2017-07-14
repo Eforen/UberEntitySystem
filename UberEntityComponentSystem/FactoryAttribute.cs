@@ -7,9 +7,21 @@ namespace UberEntityComponentSystem
 {
     public class FactoryAttribute : Attribute
     {
+
+        /// <summary>
+        /// The factory we want to declare makes and cleans this type.
+        /// </summary>
+        public Type factory;
+
+        /// <summary>
+        /// The type this is.
+        /// </summary>
+        public Type target;
+
         public FactoryAttribute(Type factory, Type target)
         {
-            throw new NotImplementedException();
+            this.factory = factory;
+            this.target = target;
         }
     }
 }

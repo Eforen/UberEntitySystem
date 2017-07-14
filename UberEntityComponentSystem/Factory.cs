@@ -8,25 +8,64 @@ namespace UberEntityComponentSystem
 {
     public static class Factory
     {
+        private static Dictionary<Type, ObjectFactoryBase> factories = new Dictionary<Type, ObjectFactoryBase>();
+
         private static Dictionary<Type, Queue<object>> caches = new Dictionary<Type, Queue<object>>();
 
         #region Helper Methods
+        /// <summary>
+        /// If the factories have been scanned yet.
+        /// </summary>
+        private static bool initialized;
+
+        private static void checkSetup()
+        {
+            if (initialized) return;
+            initialized = true;
+
+            MethodInfo registerMethod = typeof(Factory).GetMethod("RegisterFactory"); //get reference to the Method itself
+
+            //Scan Everything for factories
+            //Get all active assemblies and loop each one.
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                //Get and loop through all Types in current assembly
+                foreach (Type type in assembly.GetTypes())
+                {
+                    //Get list of any/all Factory Attributes on the type
+                    var attribs = type.GetCustomAttributes(typeof(FactoryAttribute), false);
+                    if (attribs == null || attribs.Length == 0) //No Factory attribute found
+                        continue;  //Skip the rest of this loop and go to next type.
+
+                    //Clearly has a Factory so get the Factory marker and register it.
+                    FactoryAttribute fattr = attribs[0] as FactoryAttribute;
+
+                    //Effectively do Factory.RegisterFactory<factory, target>() using reflection
+                    registerMethod
+                        .MakeGenericMethod(fattr.factory, fattr.target)
+                        .Invoke(null, null);
+                }
+            }
+        }
 
         public static void RegisterFactory<T, V>()
-            where T : ObjectFactory<V>, new()
+            where T : ObjectFactoryBase, new()
             where V : class, new()
         {
-            throw new NotImplementedException();
+            if (IsRegistered<V>() == false)
+                factories.Add(typeof(V), new T());
         }
 
         public static bool IsRegistered<V>()
         {
-            throw new NotImplementedException();
+            checkSetup();
+            return factories.ContainsKey(typeof(V));
         }
 
         public static bool IsRegistered(Type type)
         {
-            throw new NotImplementedException();
+            checkSetup();
+            return factories.ContainsKey(type);
         }
         #endregion // Helper Methods
 
@@ -38,18 +77,27 @@ namespace UberEntityComponentSystem
         /// <returns></returns>
         public static V Get<V>() where V : class, new()
         {
-            if (caches.ContainsKey(typeof(V)) &&
-                caches[typeof(V)].Count > 0)
-                return caches[typeof(V)].Dequeue() as V;
+            if (caches.ContainsKey(typeof(V)) && //Cache has the  requested type setup
+                caches[typeof(V)].Count > 0) //Cache contains at least one cleaned copy of the object type
+                return caches[typeof(V)].Dequeue() as V; //Return the pre-cleaned object
 
+            //No prepared objects available for what ever reason so we need to instantiate it.
+            if (IsRegistered<V>()) //The Type has a factory registered so it is safe to use it
+                return (factories[typeof(V)] as ObjectFactory<V>).CreateNew(); //Return new object out of factory
+
+            //Must not have factory so run standard new
             return new V();
         }
 
         public static object Get(Type type)
         {
-            if (caches.ContainsKey(type) &&
-                caches[type].Count > 0)
-                return caches[type].Dequeue();
+            if (caches.ContainsKey(type) && //Cache has the  requested type setup
+                caches[type].Count > 0) //Cache contains at least one cleaned copy of the object type
+                return caches[type].Dequeue(); //Return the pre-cleaned object
+
+            //No prepared objects available for what ever reason so we need to instantiate it.
+            if (IsRegistered(type)) //The Type has a factory registered so it is safe to use it
+                return (factories[type] as ObjectFactoryBase).ObjCreateNew(); //Return new object out of factory
 
             try
             {
@@ -63,6 +111,9 @@ namespace UberEntityComponentSystem
 
         public static V Clean<V>(V target) where V : class, new()
         {
+            if (IsRegistered<V>()) //The Type has a factory registered so it is safe to use it
+                return (factories[typeof(V)] as ObjectFactory<V>).CleanForReuse(target); //Clean the obj using its factory
+
             return target;
         }
         
@@ -75,7 +126,7 @@ namespace UberEntityComponentSystem
 
             foreach (V value in targets)
             {
-                caches[typeof(V)].Enqueue(value);
+                caches[typeof(V)].Enqueue(Clean<V>(value));
             }
 
             //TODO: Profile with more types to see which is faster
