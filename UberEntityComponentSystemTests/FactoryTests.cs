@@ -192,6 +192,7 @@ namespace UberEntityComponentSystemTests
         }
 
         [Test]
+        [Repeat(5000)]
         public void CacheCount()
         {
             //Setup and test 1
@@ -438,15 +439,15 @@ namespace UberEntityComponentSystemTests
             Assert.AreEqual(3, Factory.Count(typeof(FactoryTestObj2)), "Setup Failed");
 
             //test
-            Factory.Reset<FactoryTestObj>();
+            Factory.Reset(typeof(FactoryTestObj));
             Assert.AreEqual(0, Factory.Count(typeof(FactoryTestObj)), "FactoryTestObj Not Cleared");
             Assert.AreEqual(3, Factory.Count(typeof(FactoryTestObj2)), "FactoryTestObj2 Not Cleared");
 
-            Factory.Reset<FactoryTestObj>();
+            Factory.Reset(typeof(FactoryTestObj));
             Assert.AreEqual(0, Factory.Count(typeof(FactoryTestObj)), "FactoryTestObj Not Cleared");
             Assert.AreEqual(3, Factory.Count(typeof(FactoryTestObj2)), "FactoryTestObj2 Not Cleared");
 
-            Factory.Reset<FactoryTestObj2>();
+            Factory.Reset(typeof(FactoryTestObj2));
             Assert.AreEqual(0, Factory.Count(typeof(FactoryTestObj2)), "FactoryTestObj2 Not Cleared");
         }
 
@@ -508,18 +509,21 @@ namespace UberEntityComponentSystemTests
             Factory.Cache(new FactoryTestObj());
             Assert.AreEqual(1, Factory.Count(typeof(FactoryTestObj)));
             Assert.AreEqual(0, Factory.Count(typeof(FactoryTestObj2)));
+            Assert.AreEqual(1, Factory.Count(typeof(FactoryTestObj), typeof(FactoryTestObj2)));
 
             //Setup and test 2
             Factory.Cache(new FactoryTestObj());
             Factory.Cache(new FactoryTestObj2());
             Assert.AreEqual(2, Factory.Count(typeof(FactoryTestObj)));
             Assert.AreEqual(1, Factory.Count(typeof(FactoryTestObj2)));
+            Assert.AreEqual(3, Factory.Count(typeof(FactoryTestObj), typeof(FactoryTestObj2)));
 
             //Setup and test 3
             Factory.Cache(new FactoryTestObj());
             Factory.Cache(new FactoryTestObj());
             Assert.AreEqual(4, Factory.Count(typeof(FactoryTestObj)));
             Assert.AreEqual(1, Factory.Count(typeof(FactoryTestObj2)));
+            Assert.AreEqual(5, Factory.Count(typeof(FactoryTestObj), typeof(FactoryTestObj2)));
 
             //Setup and test 4
             Factory.Cache(new FactoryTestObj2());
@@ -527,6 +531,8 @@ namespace UberEntityComponentSystemTests
             Factory.Cache(new FactoryTestObj2());
             Assert.AreEqual(4, Factory.Count(typeof(FactoryTestObj)));
             Assert.AreEqual(4, Factory.Count(typeof(FactoryTestObj2)));
+            Assert.AreEqual(8, Factory.Count(typeof(FactoryTestObj), typeof(FactoryTestObj2)));
+            Assert.AreEqual(8, Factory.Count(new Type[] { typeof(FactoryTestObj), typeof(FactoryTestObj2) }));
         }
 
         [Test]

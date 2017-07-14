@@ -8,6 +8,8 @@ namespace UberEntityComponentSystem
 {
     public static class Factory
     {
+        private static Dictionary<Type, Queue<object>> caches = new Dictionary<Type, Queue<object>>();
+
         #region Helper Methods
 
         public static void RegisterFactory<T, V>()
@@ -36,22 +38,58 @@ namespace UberEntityComponentSystem
         /// <returns></returns>
         public static V Get<V>() where V : class, new()
         {
-            throw new NotImplementedException();
+            if (caches.ContainsKey(typeof(V)) &&
+                caches[typeof(V)].Count > 0)
+                return caches[typeof(V)].Dequeue() as V;
+
+            return new V();
         }
 
         public static object Get(Type type)
         {
-            throw new NotImplementedException();
+            if (caches.ContainsKey(type) &&
+                caches[type].Count > 0)
+                return caches[type].Dequeue();
+
+            try
+            {
+                return type.GetConstructor(Type.EmptyTypes).Invoke(new object[] { });
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static V Clean<V>(V target) where V : class, new()
         {
-            throw new NotImplementedException();
+            return target;
         }
-
+        
         public static void Cache<V>(params V[] targets) where V : class, new()
         {
-            throw new NotImplementedException();
+            if (targets.Count() == 0) return;
+
+            if (caches.ContainsKey(typeof(V)) == false) //There is currently no cache for this type of obj
+                caches.Add(typeof(V), new Queue<object>()); //Create cache for this type of OBJ
+
+            foreach (V value in targets)
+            {
+                caches[typeof(V)].Enqueue(value);
+            }
+
+            //TODO: Profile with more types to see which is faster
+            /*
+            try
+            {
+                _counts[typeof(V)]++;
+            }
+            catch (KeyNotFoundException)
+            {
+                _counts.Add(typeof(V), 1);
+            }
+            */
+
         }
         #endregion //Core Functionality
 
@@ -63,12 +101,30 @@ namespace UberEntityComponentSystem
         /// <returns>Amount of objects cached</returns>
         public static int Count<V>()
         {
-            throw new NotImplementedException();
+            if (caches.ContainsKey(typeof(V)) == false)
+                return 0;
+            return caches[typeof(V)].Count;
+
+            //TODO: Profile with more types to see which is faster
+            /*
+            try
+            {
+                return _counts[typeof(V)];
+            }
+            catch (KeyNotFoundException)
+            {
+                return 0;
+            }
+            */
         }
 
         public static int Count(params Type[] types)
         {
-            throw new NotImplementedException();
+            int count = 0; //Setup Count Storage
+            foreach (Type type in types) // Loop through the types
+                if (caches.ContainsKey(type)) //Cache has the requested type setup
+                    count += caches[type].Count; //The count of Cache for the object type
+            return count;
         }
 
         /// <summary>
@@ -76,7 +132,7 @@ namespace UberEntityComponentSystem
         /// </summary>
         public static void Reset()
         {
-            throw new NotImplementedException();
+            caches.Clear();
         }
 
         /// <summary>
@@ -85,7 +141,18 @@ namespace UberEntityComponentSystem
         /// <typeparam name="V"></typeparam>
         public static void Reset<V>()
         {
-            throw new NotImplementedException();
+            if (caches.ContainsKey(typeof(V))) //Cache has the requested type setup
+                caches[typeof(V)].Clear();
+        }
+
+        /// <summary>
+        /// Clears the Cache for type.
+        /// </summary>
+        /// <typeparam name="V"></typeparam>
+        public static void Reset(Type type)
+        {
+            if (caches.ContainsKey(type)) //Cache has the requested type setup
+                caches[type].Clear();
         }
         #endregion // Debug
     }
