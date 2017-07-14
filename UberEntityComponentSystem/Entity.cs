@@ -4,6 +4,9 @@ using System.Text;
 
 namespace UberEntityComponentSystem
 {
+    /// <summary>
+    /// stores all the components (data) for an entity
+    /// </summary>
     public class Entity
     {
         /// <summary>
@@ -11,7 +14,7 @@ namespace UberEntityComponentSystem
         /// by creating tons of handles instead we give a ref to the same one out as long
         /// as its still in phase with this entity.
         /// </summary>
-        protected Handle _handle;
+        private Handle _handle;
 
         /// <summary>
         /// Get current handle for this Entity.
@@ -20,9 +23,9 @@ namespace UberEntityComponentSystem
         {
             get
             {
-                if(_handle == null || _handle.phase != this.phase) //If handle has gone out of phase or is not yet set
+                if (_handle == null || _handle.phase != this.phase) //If handle has gone out of phase or is not yet set
                     this._handle = new Handle(this); //Create and store handle to this entity
-                return this._handle; //Return current handle
+                return _handle; //Return current handle
             }
         }
 

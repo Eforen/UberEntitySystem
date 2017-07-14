@@ -58,6 +58,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="ObjectFactoryTest.cs" />
+    <Compile Include="FactoryTests.cs" />
     <Compile Include="HandleTests.cs" />
     <Compile Include="EntityTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
