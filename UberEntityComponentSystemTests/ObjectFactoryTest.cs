@@ -12,7 +12,7 @@ namespace UberEntityComponentSystemTests
     class FactoryTestObjTesterCleanForReuseCalled : Exception { }
     class FactoryTestObjTesterCreateNewCalled : Exception { }
 
-    class FactoryTestObjTester {}
+    class FactoryTestObjTester { }
 
     /// <summary>
     /// DO NOT CHANGE UNLESS YOU KNOW WHAT YOUR DOING!
@@ -21,14 +21,33 @@ namespace UberEntityComponentSystemTests
     {
         public override FactoryTestObjTester CleanForReuse(FactoryTestObjTester obj)
         {
-            //throw new FactoryTestObjTesterCleanForReuseCalled(); //Prove the method was called
-            throw new NotImplementedException();
+            throw new FactoryTestObjTesterCleanForReuseCalled(); //Prove the method was called
         }
 
         public override FactoryTestObjTester CreateNew()
         {
-            //throw new FactoryTestObjTesterCreateNewCalled(); //Prove the method was called
-            throw new NotImplementedException();
+            throw new FactoryTestObjTesterCreateNewCalled(); //Prove the method was called
+        }
+    }
+
+    class FactoryTestObjTesterCleanForReuseCalled2 : Exception { }
+    class FactoryTestObjTesterCreateNewCalled2 : Exception { }
+
+    class FactoryTestObjTester2 { }
+
+    /// <summary>
+    /// DO NOT CHANGE UNLESS YOU KNOW WHAT YOUR DOING!
+    /// </summary>
+    class FactoryTestObjTesterFactory2 : ObjectFactory<FactoryTestObjTester2>
+    {
+        public override FactoryTestObjTester2 CleanForReuse(FactoryTestObjTester2 obj)
+        {
+            throw new FactoryTestObjTesterCleanForReuseCalled2(); //Prove the method was called
+        }
+
+        public override FactoryTestObjTester2 CreateNew()
+        {
+            throw new FactoryTestObjTesterCreateNewCalled2(); //Prove the method was called
         }
     }
 
@@ -51,9 +70,11 @@ namespace UberEntityComponentSystemTests
         {
             //Setup
             FactoryTestObjTesterFactory fact = new FactoryTestObjTesterFactory();
+            FactoryTestObjTesterFactory2 fact2 = new FactoryTestObjTesterFactory2();
 
             //Test
             Assert.Throws<FactoryTestObjTesterCleanForReuseCalled>(() => fact.CleanForReuse(new FactoryTestObjTester()), "Factory New didn't work.");
+            Assert.Throws<FactoryTestObjTesterCleanForReuseCalled2>(() => fact2.CleanForReuse(new FactoryTestObjTester2()), "Factory New didn't work.");
         }
 
         //ObjectFactoryTest::ObjCleanForReuse();
@@ -62,9 +83,24 @@ namespace UberEntityComponentSystemTests
         {
             //Setup
             FactoryTestObjTesterFactory fact = new FactoryTestObjTesterFactory();
+            FactoryTestObjTesterFactory2 fact2 = new FactoryTestObjTesterFactory2();
 
             //Test
             Assert.Throws<FactoryTestObjTesterCleanForReuseCalled>(() => fact.ObjCleanForReuse(new FactoryTestObjTester()), "Factory Base New didn't work.");
+            Assert.Throws<FactoryTestObjTesterCleanForReuseCalled2>(() => fact2.ObjCleanForReuse(new FactoryTestObjTester2()), "Factory Base New didn't work.");
+        }
+
+        //ObjectFactoryTest::ObjCleanForReuse();
+        [Test]
+        public void CleanForReuseBaseExplodeTest()
+        {
+            //Setup
+            FactoryTestObjTesterFactory fact = new FactoryTestObjTesterFactory();
+            FactoryTestObjTesterFactory2 fact2 = new FactoryTestObjTesterFactory2();
+
+            //Test
+            Assert.Throws<InvalidCastException>(() => fact.ObjCleanForReuse(new FactoryTestObjTester2()), "Factory Base New didn't work.");
+            Assert.Throws<InvalidCastException>(() => fact2.ObjCleanForReuse(new FactoryTestObjTester()), "Factory Base New didn't work.");
         }
 
         //ObjectFactoryTest::CreateNew();
@@ -73,9 +109,11 @@ namespace UberEntityComponentSystemTests
         {
             //Setup
             FactoryTestObjTesterFactory fact = new FactoryTestObjTesterFactory();
+            FactoryTestObjTesterFactory2 fact2 = new FactoryTestObjTesterFactory2();
 
             //Test
             Assert.Throws<FactoryTestObjTesterCreateNewCalled>(() => fact.CreateNew(), "Factory New didn't work.");
+            Assert.Throws<FactoryTestObjTesterCreateNewCalled2>(() => fact2.CreateNew(), "Factory New didn't work.");
         }
 
         //ObjectFactoryTest::ObjCreateNew();
@@ -84,9 +122,11 @@ namespace UberEntityComponentSystemTests
         {
             //Setup
             FactoryTestObjTesterFactory fact = new FactoryTestObjTesterFactory();
+            FactoryTestObjTesterFactory2 fact2 = new FactoryTestObjTesterFactory2();
 
             //Test
             Assert.Throws<FactoryTestObjTesterCreateNewCalled>(() => fact.ObjCreateNew(), "Factory Base New didn't work.");
+            Assert.Throws<FactoryTestObjTesterCreateNewCalled2>(() => fact2.ObjCreateNew(), "Factory Base New didn't work.");
         }
     }
 }

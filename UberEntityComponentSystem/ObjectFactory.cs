@@ -11,7 +11,7 @@ namespace UberEntityComponentSystem
         public abstract T CreateNew();
         public override object ObjCreateNew()
         {
-            throw new NotImplementedException();
+            return CreateNew();
         }
 
         /// <summary>
@@ -22,11 +22,14 @@ namespace UberEntityComponentSystem
         public abstract T CleanForReuse(T obj);
         public override object ObjCleanForReuse(object obj)
         {
-            throw new NotImplementedException();
+            return CleanForReuse((T) obj);
         }
 
     }
 
+    /// <summary>
+    /// DO NOT EXTEND
+    /// </summary>
     public abstract class ObjectFactoryBase
     {
         /// <summary>
