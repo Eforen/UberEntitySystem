@@ -9,6 +9,7 @@ using UberEntitySystemCore;
 namespace UberEntitySystemCoreTests.Tutorial_3
 {
     using NUnit.Framework;
+    using System.Diagnostics;
 
     public class Component1 : IComponent { }
 
@@ -219,6 +220,70 @@ namespace UberEntitySystemCoreTests.Tutorial_3
             Assert.AreEqual(c2, ComponentInfo.getID<Component2>());
             Assert.AreEqual(c3, ComponentInfo.getID<Component3>());
             Assert.AreEqual(c4, ComponentInfo.getID<Component4>());
+        }
+
+        [Test]
+        [Theory]
+        public void TypeLookupVsStringLookup([Values(12857982)]int seed, [Values(5, 50, 500, 5000, 50000, 500000, 5000000)]int benchmarkCount)
+        {
+            Random rand = new Random(seed); //Get Specific Rand
+            Type[] typeLookups = { typeof(Component1), typeof(Component2), typeof(Component3), typeof(Component4) };
+            string[] stringLookups = { "Component1", "Component2", "Component3", "Component4" };
+            int[] intLookups = { 0, 1, 2, 3 };
+
+            Dictionary<Type, int> listByTypes = new Dictionary<Type, int>(); //Setup Type List
+            listByTypes.Add(typeLookups[0], 0);
+            listByTypes.Add(typeLookups[1], 0);
+            listByTypes.Add(typeLookups[2], 0);
+            listByTypes.Add(typeLookups[3], 0);
+
+            GC.Collect(); //Force garbage collection right now!
+            Stopwatch swTypeList = Stopwatch.StartNew(); //Start the watch
+            for (int i = 0; i < benchmarkCount; i++)
+            {
+                listByTypes[typeLookups[rand.Next(3)]] = rand.Next();
+            }
+            swTypeList.Stop();
+
+
+
+
+
+            rand = new Random(seed); //Reset to Specific Rand
+            Dictionary<String, int> listByString = new Dictionary<String, int>(); //Setup Type List
+            listByString.Add(stringLookups[0], 0);
+            listByString.Add(stringLookups[1], 0);
+            listByString.Add(stringLookups[2], 0);
+            listByString.Add(stringLookups[3], 0);
+
+            GC.Collect(); //Force garbage collection right now!
+            Stopwatch swStringList = Stopwatch.StartNew(); //Start the watch
+            for (int i = 0; i < benchmarkCount; i++)
+            {
+                listByString[stringLookups[rand.Next(3)]] = rand.Next();
+            }
+            swStringList.Stop();
+
+
+
+
+
+            rand = new Random(seed); //Reset to Specific Rand
+            Dictionary<int, int> listByInt = new Dictionary<int, int>(); //Setup Type List
+            listByInt.Add(intLookups[0], 0);
+            listByInt.Add(intLookups[1], 0);
+            listByInt.Add(intLookups[2], 0);
+            listByInt.Add(intLookups[3], 0);
+
+            GC.Collect(); //Force garbage collection right now!
+            Stopwatch swIntList = Stopwatch.StartNew(); //Start the watch
+            for (int i = 0; i < benchmarkCount; i++)
+            {
+                listByInt[intLookups[rand.Next(3)]] = rand.Next();
+            }
+            swIntList.Stop();
+
+            Assert.Pass("typeLookups: {0}\nstringLookups: {1}\nintLookups: {2}", swTypeList.ElapsedMilliseconds, swStringList.ElapsedMilliseconds, swIntList.ElapsedMilliseconds);
         }
 
         [TearDown]
