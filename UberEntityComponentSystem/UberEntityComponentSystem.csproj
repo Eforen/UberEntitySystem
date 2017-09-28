@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6CA1034B-4F7A-4E39-9D99-EF710CA58E43}</ProjectGuid>
+    <ProjectGuid>{4887851B-1DCF-445F-A104-A993D60F4C80}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UberEntitySystemCore</RootNamespace>
-    <AssemblyName>UberEntitySystemCore</AssemblyName>
+    <RootNamespace>UberEntityComponentSystem</RootNamespace>
+    <AssemblyName>UberEntityComponentSystem</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
@@ -36,12 +36,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentInfo.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="FactoryAttribute.cs" />
     <Compile Include="Handle.cs" />
-    <Compile Include="IComponent.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
