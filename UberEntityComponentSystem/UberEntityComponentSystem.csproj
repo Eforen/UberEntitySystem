@@ -36,6 +36,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityFactory.cs" />
+    <Compile Include="Pool.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="FactoryAttribute.cs" />

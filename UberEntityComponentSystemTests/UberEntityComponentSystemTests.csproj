@@ -58,6 +58,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="PoolTests.cs" />
     <Compile Include="ObjectFactoryTest.cs" />
     <Compile Include="FactoryTests.cs" />
     <Compile Include="HandleTests.cs" />

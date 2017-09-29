@@ -7,6 +7,7 @@ namespace UberEntityComponentSystem
     /// <summary>
     /// stores all the components (data) for an entity
     /// </summary>
+    [Factory(typeof(EntityFactory), typeof(Entity))]
     public class Entity
     {
         /// <summary>
@@ -33,6 +34,13 @@ namespace UberEntityComponentSystem
         /// Used to determine if a handle is out of phase with its entity.
         /// </summary>
         public int phase { get; protected set; }
+        public Pool pool { get; protected set; }
+        public Entity setPool(Pool p)
+        {
+            if (pool != null) pool.remove(this);
+            pool = p;
+            return this;
+        }
 
         /// <summary>
         /// Increments the phase up one and causes it to go totally out of phase with any handles floating around.
