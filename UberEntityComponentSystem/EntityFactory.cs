@@ -10,6 +10,8 @@ namespace UberEntityComponentSystem
         public override Entity CleanForReuse(Entity obj)
         {
             obj.setPool(null);
+            obj.phaseUp();
+            obj.resetToDefaults();
             return obj;
         }
 
