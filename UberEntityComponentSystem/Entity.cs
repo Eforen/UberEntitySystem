@@ -128,5 +128,63 @@ namespace UberEntityComponentSystem
         }
 
         #endregion //Component
+
+        #region Tags
+
+        private HashSet<Type> tags = new HashSet<Type>();
+
+        #region Tags Generics
+        /// <summary>
+        /// Returns if the tag is set or not
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool hasTag<T>() where T : ITag
+        {
+            return tags.Contains(typeof(T));
+        }
+
+        /// <summary>
+        /// sets the tag and returns if it was set
+        /// </summary>
+        /// <typeparam name="T">Tag</typeparam>
+        /// <returns>true if was set already</returns>
+        public bool setTag<T>() where T : ITag
+        {
+            return !tags.Add(typeof(T)); //invert because Microsoft returns true if it is not in the set we return true if is in the set
+        }
+
+        /// <summary>
+        /// unsets the tag and returns if it was set
+        /// </summary>
+        /// <typeparam name="T">Tag</typeparam>
+        /// <returns>true if was set</returns>
+        public bool unsetTag<T>() where T : ITag
+        {
+            return tags.Remove(typeof(T));
+        }
+        #endregion //Tags Generics
+
+        #region Tags Type Param
+
+        public bool hasTag(Type t)
+        {
+            return tags.Contains(t);
+        }
+
+        private readonly Type tagInterface = typeof(ITag);
+        public bool setTag(Type t)
+        {
+            if (tagInterface.IsAssignableFrom(t) == false) return false; //Check implements interface return false and ship the rest if it is not an ITag
+            return !tags.Add(t); //invert because Microsoft returns true if it is not in the set we return true if is in the set
+        }
+
+        public bool unsetTag(Type t)
+        {
+            return tags.Remove(t);
+        }
+        #endregion // Tags Type Param
+
+        #endregion //Tags
     }
 }

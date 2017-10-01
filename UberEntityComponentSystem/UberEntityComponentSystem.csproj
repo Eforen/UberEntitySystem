@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="EntityFactory.cs" />
     <Compile Include="Component.cs" />
+    <Compile Include="ITag.cs" />
     <Compile Include="Pool.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Factory.cs" />
