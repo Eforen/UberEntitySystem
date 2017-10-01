@@ -7,7 +7,7 @@ namespace UberEntityComponentSystem
     /// <summary>
     /// Small Amount of data no methods
     /// </summary>
-    public abstract class Component
+    public class Component
     {
         private Entity _owner = null;
         public Entity owner {

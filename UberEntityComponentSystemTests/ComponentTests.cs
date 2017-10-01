@@ -12,6 +12,12 @@ namespace UberEntityComponentSystem.Tests
     [TestClass()]
     public class ComponentTests
     {
+        [TearDown]
+        public void Cleanup()
+        {
+            Factory.Reset();
+        }
+
         public class DataComponent1 : Component
         {
             public float x, y, z;
@@ -51,7 +57,7 @@ namespace UberEntityComponentSystem.Tests
         }
         private class EntityProxy : Entity
         {
-            public override T removeComponent<T>(T component = null)
+            public override T removeComponent<T>(T component = null, bool recycleComponent = true)
             {
                 throw new RemoveCompCalled();
             }
@@ -126,6 +132,44 @@ namespace UberEntityComponentSystem.Tests
 
             Assert.AreSame(d2, d22);
             Assert.AreSame(d2, e2.getComponent<DataComponent2>());
+        }
+
+        [Test]
+        public void RecycleComponents()
+        {
+            Entity e1 = new Entity();
+            Entity e2 = new Entity();
+
+            DataComponent1 d1 = e1.addComponent<DataComponent1>();
+            DataComponent2 d2 = e2.addComponent<DataComponent2>();
+
+            Assert.IsTrue(e1.hasComponent<DataComponent1>());
+            Assert.IsTrue(e2.hasComponent<DataComponent2>());
+
+            e1.removeComponent<DataComponent1>();
+            e2.removeComponent<DataComponent2>();
+
+            Assert.AreSame(d1, Factory.Get<DataComponent1>());
+            Assert.AreSame(d2, Factory.Get<DataComponent2>());
+        }
+
+        [Test]
+        public void DontRecycleComponents()
+        {
+            Entity e1 = new Entity();
+            Entity e2 = new Entity();
+
+            DataComponent1 d1 = e1.addComponent<DataComponent1>();
+            DataComponent2 d2 = e2.addComponent<DataComponent2>();
+
+            Assert.IsTrue(e1.hasComponent<DataComponent1>());
+            Assert.IsTrue(e2.hasComponent<DataComponent2>());
+
+            e1.removeComponent<DataComponent1>(null, false);
+            e2.removeComponent<DataComponent2>(null, false);
+
+            Assert.AreNotSame(d1, Factory.Get<DataComponent1>());
+            Assert.AreNotSame(d2, Factory.Get<DataComponent2>());
         }
 
         [Test]

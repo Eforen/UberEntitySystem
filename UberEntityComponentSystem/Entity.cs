@@ -111,13 +111,14 @@ namespace UberEntityComponentSystem
         /// <typeparam name="T">The type to remove from this Entity.</typeparam>
         /// <param name="component">Does not remove this exact component nessesaraly. This is just an alternate way to specify the type to remove</param>
         /// <returns>The component of T type that was removed from entity or null if no component available.</returns>
-        public virtual T removeComponent<T>(T component = null) where T : Component
+        public virtual T removeComponent<T>(T component = null, bool recycleComponent = true) where T : Component, new()
         {
             try
             {
                 T t = (T)components[typeof(T)];
                 components.Remove(typeof(T));
                 t.owner = null;
+                if (recycleComponent) Factory.Cache(t);
                 return t;
             }
             catch (Exception)
