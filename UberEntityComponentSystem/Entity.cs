@@ -63,6 +63,7 @@ namespace UberEntityComponentSystem
 
         private Dictionary<Type, Component> components = new Dictionary<Type, Component>();
 
+        #region Generics
         public T getComponent<T>() where T : Component
         {
             try
@@ -126,6 +127,71 @@ namespace UberEntityComponentSystem
                 return null;
             }
         }
+        #endregion //Generics
+
+        #region Type Param
+        public Component getComponent(Type component)
+        {
+            try
+            {
+                return components[component];
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public bool hasComponent(Type component)
+        {
+            return components.ContainsKey(component);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public Component addComponent(Type comp)
+        {
+            Component component;
+            try
+            {
+                component = Factory.Get(comp) as Component;
+                component.owner = this;
+                components.Add(comp, component);
+                return component;
+            }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException("A component with that type already exists in the Entity.");
+            }
+            throw new Exception("Unknown Error: addComponent<T>");
+        }
+
+        /// <summary>
+        /// Removes a type of component from this entity.
+        /// </summary>
+        /// <typeparam name="T">The type to remove from this Entity.</typeparam>
+        /// <param name="component">Does not remove this exact component nessesaraly. This is just an alternate way to specify the type to remove</param>
+        /// <returns>The component of T type that was removed from entity or null if no component available.</returns>
+        public virtual Component removeComponent(Type component, bool recycleComponent = true)
+        {
+            try
+            {
+                object t = components[component];
+                components.Remove(component);
+                (t as Component).owner = null;
+                if (recycleComponent) Factory.Cache(t);
+                return t as Component;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        #endregion //Type Param
 
         #endregion //Component
 

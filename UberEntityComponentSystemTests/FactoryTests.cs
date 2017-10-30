@@ -519,6 +519,39 @@ namespace UberEntityComponentSystemTests
         }
 
         [Test]
+        public void MethodCacheAndGetAnnonomized()
+        {
+            //setup
+            object f1 = Factory.Get(typeof(FactoryTestObj)) as FactoryTestObj;
+            object f2 = Factory.Get(typeof(FactoryTestObj)) as FactoryTestObj;
+            object f3 = Factory.Get(typeof(FactoryTestObj2)) as FactoryTestObj2;
+            object f4 = Factory.Get(typeof(FactoryTestObj2)) as FactoryTestObj2;
+
+            //Test new() Getters
+            Assert.AreNotSame(f1, f2);
+            Assert.AreNotSame(f3, f4);
+            Assert.IsNotNull(f1);
+            Assert.IsNotNull(f2);
+            Assert.IsNotNull(f3);
+            Assert.IsNotNull(f4);
+
+            Assert.IsInstanceOf<FactoryTestObj>(f1);
+            Assert.IsInstanceOf<FactoryTestObj>(f2);
+            Assert.IsInstanceOf<FactoryTestObj2>(f3);
+            Assert.IsInstanceOf<FactoryTestObj2>(f4);
+
+            //Cache all
+            Factory.Cache(f1);
+            Factory.Cache(f2);
+            Factory.Cache(f3, f4);
+
+            Assert.AreSame(f1, Factory.Get(typeof(FactoryTestObj)));
+            Assert.AreSame(f2, Factory.Get(typeof(FactoryTestObj)));
+            Assert.AreSame(f3, Factory.Get(typeof(FactoryTestObj2)));
+            Assert.AreSame(f4, Factory.Get(typeof(FactoryTestObj2)));
+        }
+
+        [Test]
         [Ignore("Not sure I want this to be part of the Spec")]
         public void MethodDoNotDoubleCache()
         {

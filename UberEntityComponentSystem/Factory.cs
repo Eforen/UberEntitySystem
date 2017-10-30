@@ -121,12 +121,12 @@ namespace UberEntityComponentSystem
         {
             if (targets.Count() == 0) return;
 
-            if (caches.ContainsKey(typeof(V)) == false) //There is currently no cache for this type of obj
-                caches.Add(typeof(V), new Queue<object>()); //Create cache for this type of OBJ
-
             foreach (V value in targets)
             {
-                caches[typeof(V)].Enqueue(Clean<V>(value));
+                if (caches.ContainsKey(value.GetType()) == false) //There is currently no cache for this type of obj
+                    caches.Add(value.GetType(), new Queue<object>()); //Create cache for this type of OBJ
+
+                caches[value.GetType()].Enqueue(Clean<V>(value));
             }
 
             //TODO: Profile with more types to see which is faster
