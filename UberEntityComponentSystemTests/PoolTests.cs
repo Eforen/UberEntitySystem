@@ -136,7 +136,21 @@ namespace UberEntityComponentSystem.Tests
             Assert.NotNull(e2);
             Assert.AreSame(e1, e2);
         }
+
+        [Test]
+        public void Indexer()
+        {
+            Pool pool = new Pool();
+            Handle[] entities = { pool.newEntity.handle, pool.newEntity.handle, pool.newEntity.handle, pool.newEntity.handle, pool.newEntity.handle, pool.newEntity.handle };
+
+            Assert.AreEqual(6, pool.Count);
+            for (int i = 0; i < pool.Count; i++)
+            {
+                Assert.AreSame(entities[i], pool[i]);
+            }
+        }
+
         #endregion //Entity
-        
+
     }
 }

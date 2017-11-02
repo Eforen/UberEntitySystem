@@ -9,6 +9,8 @@ namespace UberEntityComponentSystem
     /// </summary>
     public class Pool
     {
+        #region Entities
+
         protected List<Entity> entities = new List<Entity>();
 
         public Entity newEntity {
@@ -48,5 +50,55 @@ namespace UberEntityComponentSystem
             }
             return count == entities.Length && count != 0;
         }
+
+        #endregion //Entities
+
+        #region Groups
+        
+        protected List<Group> groups = new List<Group>();
+
+        protected void addToGroups(Handle h)
+        {
+            foreach (Group g in groups)
+            {
+                g.fit(h);
+            }
+        }
+
+        public Group getGroup(Signature sig)
+        {
+            foreach (Group g in groups)
+            {
+                if (g.signature == sig)
+                {
+                    return g;
+                }
+            }
+            Group group = new Group(this, sig);
+            groups.Add(group);
+            return group;
+        }
+
+        #endregion //Groups
+
+        #region Indexing
+
+        public Handle this[int key]
+        {
+            get
+            {
+                return entities[key].handle;
+            }
+        }
+
+        internal void _updateEntity(Entity entity)
+        {
+            foreach (Group g in groups)
+            {
+                g.fit(entity.handle);
+            }
+        }
+
+        #endregion //Indexing
     }
 }

@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Group.cs" />
     <Compile Include="SignatureFactory.cs" />
     <Compile Include="Signature.cs" />
     <Compile Include="EntityFactory.cs" />

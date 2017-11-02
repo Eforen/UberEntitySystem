@@ -16,6 +16,8 @@ namespace UberEntityComponentSystem
             components.Clear();
         }
 
+        public Pool pool { get; protected set; }
+
         #region Handle
         /// <summary>
         /// Used to store the current handle so that we are not creating tons of garbage
@@ -41,7 +43,6 @@ namespace UberEntityComponentSystem
         /// Used to determine if a handle is out of phase with its entity.
         /// </summary>
         public int phase { get; protected set; }
-        public Pool pool { get; protected set; }
         public Entity setPool(Pool p)
         {
             if (pool != null) pool.remove(this);
@@ -97,6 +98,7 @@ namespace UberEntityComponentSystem
                     component = Factory.Get<T>();
                 component.owner = this;
                 components.Add(typeof(T), component);
+                pool._updateEntity(this);
                 return component;
             }
             catch (ArgumentException)
@@ -161,6 +163,7 @@ namespace UberEntityComponentSystem
                 component = Factory.Get(comp) as Component;
                 component.owner = this;
                 components.Add(comp, component);
+                pool._updateEntity(this);
                 return component;
             }
             catch (ArgumentException)
@@ -217,7 +220,9 @@ namespace UberEntityComponentSystem
         /// <returns>true if was set already</returns>
         public bool setTag<T>() where T : ITag
         {
-            return !tags.Add(typeof(T)); //invert because Microsoft returns true if it is not in the set we return true if is in the set
+            bool r = !tags.Add(typeof(T)); //invert because Microsoft returns true if it is not in the set we return true if is in the set
+            pool._updateEntity(this);
+            return r;
         }
 
         /// <summary>
@@ -227,7 +232,9 @@ namespace UberEntityComponentSystem
         /// <returns>true if was set</returns>
         public bool unsetTag<T>() where T : ITag
         {
-            return tags.Remove(typeof(T));
+            bool r = tags.Remove(typeof(T));
+            pool._updateEntity(this);
+            return r;
         }
         #endregion //Tags Generics
 
@@ -242,12 +249,16 @@ namespace UberEntityComponentSystem
         public bool setTag(Type t)
         {
             if (tagInterface.IsAssignableFrom(t) == false) return false; //Check implements interface return false and ship the rest if it is not an ITag
-            return !tags.Add(t); //invert because Microsoft returns true if it is not in the set we return true if is in the set
+            bool r = !tags.Add(t); //invert because Microsoft returns true if it is not in the set we return true if is in the set
+            pool._updateEntity(this);
+            return r;
         }
 
         public bool unsetTag(Type t)
         {
-            return tags.Remove(t);
+            bool r = tags.Remove(t);
+            pool._updateEntity(this);
+            return r;
         }
         #endregion // Tags Type Param
 
