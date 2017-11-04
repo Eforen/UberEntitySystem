@@ -37,6 +37,28 @@ namespace UberEntityComponentSystem.Tests
             new Pool();
         }
 
+        [Test]
+        public void ArrayAccessOverride()
+        {
+            Pool pool = new Pool();
+            Entity[] entities = { pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity, pool.newEntity };
+
+            Group preGroup = pool.getGroup(Signature.Get(typeof(Tag1)));
+
+            foreach (Entity e in entities)
+            {
+                e.setTag<Tag1>();
+            }
+
+            Group postGroup = pool.getGroup(Signature.Get(typeof(Tag1)));
+
+            for (int i = 0; i < entities.Length; i++)
+            {
+                Assert.AreSame(preGroup[i], entities[i].handle);
+                Assert.AreSame(postGroup[i], entities[i].handle);
+            }
+        }
+
         #region Entity
 
         [Test]

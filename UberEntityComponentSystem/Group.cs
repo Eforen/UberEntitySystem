@@ -39,6 +39,12 @@ namespace UberEntityComponentSystem
             return entities.Contains(h);
         }
 
-
+        public Handle this[int key]
+        {
+            get
+            {
+                return entities[key];
+            }
+        }
     }
 }
