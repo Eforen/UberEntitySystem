@@ -60,6 +60,9 @@
   <ItemGroup>
     <Compile Include="PoolGroupsTests.cs" />
     <Compile Include="SignatureTests.cs" />
+    <Compile Include="ChangeMonitorTests.cs" />
+    <Compile Include="TopologicalSortTests.cs" />
+    <Compile Include="SystemTests.cs" />
     <Compile Include="TagTests.cs" />
     <Compile Include="ComponentTests.cs" />
     <Compile Include="PoolTests.cs" />

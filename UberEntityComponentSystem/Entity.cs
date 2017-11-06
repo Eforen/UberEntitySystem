@@ -98,7 +98,7 @@ namespace UberEntityComponentSystem
                     component = Factory.Get<T>();
                 component.owner = this;
                 components.Add(typeof(T), component);
-                pool._updateEntity(this);
+                if(pool != null) pool._updateEntity(this);
                 return component;
             }
             catch (ArgumentException)
@@ -163,7 +163,7 @@ namespace UberEntityComponentSystem
                 component = Factory.Get(comp) as Component;
                 component.owner = this;
                 components.Add(comp, component);
-                pool._updateEntity(this);
+                if (pool != null) pool._updateEntity(this);
                 return component;
             }
             catch (ArgumentException)
@@ -221,7 +221,7 @@ namespace UberEntityComponentSystem
         public bool setTag<T>() where T : ITag
         {
             bool r = !tags.Add(typeof(T)); //invert because Microsoft returns true if it is not in the set we return true if is in the set
-            pool._updateEntity(this);
+            if (pool != null) pool._updateEntity(this);
             return r;
         }
 
@@ -233,7 +233,7 @@ namespace UberEntityComponentSystem
         public bool unsetTag<T>() where T : ITag
         {
             bool r = tags.Remove(typeof(T));
-            pool._updateEntity(this);
+            if (pool != null) pool._updateEntity(this);
             return r;
         }
         #endregion //Tags Generics
@@ -250,14 +250,14 @@ namespace UberEntityComponentSystem
         {
             if (tagInterface.IsAssignableFrom(t) == false) return false; //Check implements interface return false and ship the rest if it is not an ITag
             bool r = !tags.Add(t); //invert because Microsoft returns true if it is not in the set we return true if is in the set
-            pool._updateEntity(this);
+            if (pool != null) pool._updateEntity(this);
             return r;
         }
 
         public bool unsetTag(Type t)
         {
             bool r = tags.Remove(t);
-            pool._updateEntity(this);
+            if (pool != null) pool._updateEntity(this);
             return r;
         }
         #endregion // Tags Type Param
