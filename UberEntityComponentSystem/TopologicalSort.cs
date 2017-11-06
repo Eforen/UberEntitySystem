@@ -29,47 +29,80 @@ namespace UberEntityComponentSystem
 
         public static IList<T> Sort<T>(IEnumerable<T> source, Func<T, IEnumerable<T>> getDependencies)
         {
-            var sorted = new List<T>();
-            var visited = new Dictionary<T, bool>();
+            List<SortWrapper<T>> waiting = new List<SortWrapper<T>>();
 
-
-            // Loop through items and mark things that depend on this 
-            foreach (var item in source)
+            //Loop Items
+            foreach (var i in source)
             {
-                Visit(item, getDependencies, sorted, visited);
-            }
-
-            return sorted;
-        }
-
-        public static void Visit<T>(T item, Func<T, IEnumerable<T>> getDependencies, List<T> sorted, Dictionary<T, bool> visited)
-        {
-            bool inProcess;
-            var alreadyVisited = visited.TryGetValue(item, out inProcess);
-
-            if (alreadyVisited)
-            {
-                if (inProcess)
+                int wrapperDeps = 0;
+                //Loop already added Wrappers
+                foreach (var t in waiting)
                 {
-                    throw new ArgumentException("Cyclic dependency found.");
-                }
-            }
-            else
-            {
-                visited[item] = true;
-
-                var dependencies = getDependencies(item);
-                if (dependencies != null)
-                {
-                    foreach (var dependency in dependencies)
+                    //Loop Items own dependencies
+                    var deps = getDependencies(i);
+                    foreach (var d in deps)
                     {
-                        Visit(dependency, getDependencies, sorted, visited);
+                        if (t.item.Equals(d))
+                        {
+                            //Target is a dependency of Item
+                            wrapperDeps++;
+                        }
+                    }
+
+                    //Loop Dependencies of added Wrappers
+                    deps = getDependencies(t.item);
+                    foreach (var d in deps)
+                    {
+                        if (i.Equals(d))
+                        {
+                            //Item is a dependency of Target
+                            t.Dependences++;
+                        }
                     }
                 }
 
-                visited[item] = false;
-                sorted.Add(item);
+                waiting.Add(new SortWrapper<T>(i, wrapperDeps));
             }
+
+
+            List<T> output = new List<T>();
+
+            //Loop until their are no waiting elements
+            while (waiting.Count > 0)
+            {
+                SortWrapper<T> targetToRemove = null;
+                //Loop all waiting elements
+                foreach (var target in waiting)
+                {
+                    //Find first target with no dependencies
+                    if (target.Dependences == 0)
+                    {
+                        //Loop all remaining items
+                        foreach (var remainer in waiting)
+                        {
+                            //Loop all dependencies of remaining items
+                            var deps = getDependencies(remainer.item);
+                            foreach (var d in deps)
+                            {
+                                if (d.Equals(target.item))
+                                {
+                                    remainer.Dependences--;
+                                    break;
+                                }
+                            }
+                        }
+                        //Add the unwrapped item to the output
+                        output.Add(target.item);
+                        //Set item to remove
+                        targetToRemove = target;
+                        //exit loop to reset to the beginning of the remaining items.
+                        break;
+                    }
+                }
+                waiting.Remove(targetToRemove);
+            }
+
+            return output;
         }
     }
 }

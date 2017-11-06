@@ -63,9 +63,9 @@ namespace UberEntityComponentSystem
                     if(node.Item.dependencies != null)
                         foreach (Type dependencey in node.Item.dependencies)
                         {
-                            if (dependencey == node.type)
+                            if (dependencey == n.type)
                             {
-                                depends.Add(node); // Add that node to this
+                                depends.Add(n); // Add that node to this
                             
                                 break; //Quit looking because each node can only be depended once
                             }

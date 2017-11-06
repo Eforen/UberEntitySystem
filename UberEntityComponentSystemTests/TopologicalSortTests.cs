@@ -77,6 +77,31 @@ namespace UberEntityComponentSystem.Tests
                 output += i.Name;
             }
 
+            Assert.AreEqual("ACFHDGEB", output);
+        }
+
+        [Test]
+        public void Test3()
+        {
+            var a = new Item("A");
+            var b = new Item("B", a);
+            var c = new Item("C", b);
+            var d = new Item("D", c);
+            var e = new Item("E", d);
+            var f = new Item("F", e);
+            var g = new Item("G", e, f);
+            var h = new Item("H", g);
+
+            var unsorted = new[] { a, c, f, h, d, g, e, b };
+
+            var sorted = TopologicalSort.Sort(unsorted, x => x.Dependencies);
+
+            string output = "";
+            foreach (Item i in sorted)
+            {
+                output += i.Name;
+            }
+
             Assert.AreEqual("ABCDEFGH", output);
         }
 

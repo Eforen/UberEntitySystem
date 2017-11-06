@@ -178,7 +178,7 @@ namespace UberEntityComponentSystem.Tests
 
             sys.Execute();
 
-            Assert.AreEqual("1234a", tracker.history);
+            Assert.AreEqual("a1234", tracker.history);
             
         }
         #endregion //System Tests
