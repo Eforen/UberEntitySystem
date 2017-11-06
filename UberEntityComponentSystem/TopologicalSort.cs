@@ -67,6 +67,7 @@ namespace UberEntityComponentSystem
 
             List<T> output = new List<T>();
 
+            int itterations = 0; // How many itterations the loop has done
             //Loop until their are no waiting elements
             while (waiting.Count > 0)
             {
@@ -100,6 +101,8 @@ namespace UberEntityComponentSystem
                     }
                 }
                 waiting.Remove(targetToRemove);
+                itterations++;
+                if (itterations > output.Count + waiting.Count) throw new Exception("Sorting Error something is wrong possibly circular reference or self dependency. (Too many itterations)");
             }
 
             return output;
