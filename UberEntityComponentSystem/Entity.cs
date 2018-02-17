@@ -85,6 +85,11 @@ namespace UberEntityComponentSystem
             return components.ContainsKey(typeof(T));
         }
 
+        internal void increment()
+        {
+            replaced.Clear();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -119,9 +124,10 @@ namespace UberEntityComponentSystem
         {
             if (component == null)
                 component = Factory.Get<T>();
-            if(null == removeComponent<T>())
+            if(removeComponent<T>() != null)
                 replaced.Add(typeof(T));
             component = addComponent<T>(component);
+            if (pool != null) pool._updateEntity(this);
 
             return component;
         }
@@ -140,6 +146,7 @@ namespace UberEntityComponentSystem
                 components.Remove(typeof(T));
                 t.owner = null;
                 if (recycleComponent) Factory.Cache(t);
+                if (pool != null) pool._updateEntity(this);
                 return t;
             }
             catch (Exception)

@@ -957,10 +957,9 @@ namespace UberEntityComponentSystem.Tests
 
             pool.incrementGroups();
 
-            e1.removeComponent<Component1>();
-            e1.unsetTag<Tag1>();
+            e1.replaceComponent<Component1>();
 
-            Assert.AreEqual(true, g1.replaced.Contains(e1.handle));
+            Assert.AreEqual(false, g1.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e1.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e1.handle));
@@ -987,11 +986,10 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g7.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g8.replaced.Contains(e3.handle));
 
+            
+            e2.replaceComponent<Component1>();
 
-            e2.unsetTag<Tag2>();
-            e2.removeComponent<Component1>();
-
-            Assert.AreEqual(true, g1.replaced.Contains(e1.handle));
+            Assert.AreEqual(false, g1.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e1.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e1.handle));
@@ -1001,7 +999,7 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g8.replaced.Contains(e1.handle));
 
             Assert.AreEqual(false, g1.replaced.Contains(e2.handle));
-            Assert.AreEqual(true, g2.replaced.Contains(e2.handle));
+            Assert.AreEqual(false, g2.replaced.Contains(e2.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g5.replaced.Contains(e2.handle));
@@ -1018,11 +1016,10 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g7.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g8.replaced.Contains(e3.handle));
 
+            
+            e3.replaceComponent<Component2>();
 
-            e3.unsetTag<Tag1>();
-            e3.removeComponent<Component2>();
-
-            Assert.AreEqual(true, g1.replaced.Contains(e1.handle));
+            Assert.AreEqual(false, g1.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e1.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e1.handle));
@@ -1032,7 +1029,7 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g8.replaced.Contains(e1.handle));
 
             Assert.AreEqual(false, g1.replaced.Contains(e2.handle));
-            Assert.AreEqual(true, g2.replaced.Contains(e2.handle));
+            Assert.AreEqual(false, g2.replaced.Contains(e2.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g5.replaced.Contains(e2.handle));
@@ -1040,7 +1037,7 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(true, g7.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g8.replaced.Contains(e2.handle));
 
-            Assert.AreEqual(true, g1.replaced.Contains(e3.handle));
+            Assert.AreEqual(false, g1.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g3.replaced.Contains(e3.handle));
             Assert.AreEqual(true, g4.replaced.Contains(e3.handle));
@@ -1078,10 +1075,9 @@ namespace UberEntityComponentSystem.Tests
 
             pool.incrementGroups();
 
-            e1.removeComponent<Component1>();
-            e1.unsetTag<Tag1>();
+            e1.replaceComponent<Component1>();
 
-            Assert.AreEqual(true, g1.replaced.Contains(e1.handle));
+            Assert.AreEqual(false, g1.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e1.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e1.handle));
@@ -1136,9 +1132,8 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g6.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g7.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g8.replaced.Contains(e3.handle));
-
-            e2.unsetTag<Tag2>();
-            e2.removeComponent<Component1>();
+            
+            e2.replaceComponent<Component1>();
 
             Assert.AreEqual(false, g1.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e1.handle));
@@ -1150,7 +1145,7 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g8.replaced.Contains(e1.handle));
 
             Assert.AreEqual(false, g1.replaced.Contains(e2.handle));
-            Assert.AreEqual(true, g2.replaced.Contains(e2.handle));
+            Assert.AreEqual(false, g2.replaced.Contains(e2.handle));
             Assert.AreEqual(true, g3.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g4.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g5.replaced.Contains(e2.handle));
@@ -1195,9 +1190,8 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g6.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g7.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g8.replaced.Contains(e3.handle));
-
-            e3.unsetTag<Tag1>();
-            e3.removeComponent<Component2>();
+            
+            e3.replaceComponent<Component2>();
 
             Assert.AreEqual(false, g1.replaced.Contains(e1.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e1.handle));
@@ -1217,7 +1211,7 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(false, g7.replaced.Contains(e2.handle));
             Assert.AreEqual(false, g8.replaced.Contains(e2.handle));
 
-            Assert.AreEqual(true, g1.replaced.Contains(e3.handle));
+            Assert.AreEqual(false, g1.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g2.replaced.Contains(e3.handle));
             Assert.AreEqual(false, g3.replaced.Contains(e3.handle));
             Assert.AreEqual(true, g4.replaced.Contains(e3.handle));

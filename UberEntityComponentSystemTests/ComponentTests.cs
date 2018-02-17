@@ -221,14 +221,17 @@ namespace UberEntityComponentSystem.Tests
             DataComponent1 d12 = e1.replaceComponent<DataComponent1>();
 
             Entity e2 = new Entity();
-            DataComponent2 d2 = e1.addComponent<DataComponent2>();
-            DataComponent2 d22 = e1.replaceComponent<DataComponent2>();
+            DataComponent2 d2 = e2.addComponent<DataComponent2>();
+            DataComponent2 d22 = e2.replaceComponent<DataComponent2>();
 
             //Test
             // Check not same
             Assert.AreSame(d12, e1.getComponent<DataComponent1>());
 
             Assert.AreSame(d22, e2.getComponent<DataComponent2>());
+
+            Assert.IsTrue(e1.replaced.Contains(typeof(DataComponent1)));
+            Assert.IsTrue(e2.replaced.Contains(typeof(DataComponent2)));
         }
 
         [Test]

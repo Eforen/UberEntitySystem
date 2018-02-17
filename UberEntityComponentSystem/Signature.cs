@@ -204,5 +204,15 @@ namespace UberEntityComponentSystem
             }
             return base.Equals(obj);
         }
+
+        public bool includes<T>(T c)
+        {
+            return tags.Contains(c.GetType()) || components.Contains(c.GetType());
+        }
+
+        public bool includes(Type t)
+        {
+            return tags.Contains(t) || components.Contains(t);
+        }
     }
 }

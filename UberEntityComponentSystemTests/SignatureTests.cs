@@ -74,6 +74,55 @@ namespace UberEntityComponentSystem.Tests
         }
 
         [Test]
+        public void Includes()
+        {
+            Signature sig1 = Signature.Get(typeof(Tag1));
+            Signature sig2 = Signature.Get(typeof(Tag1));
+            Signature sig3 = Signature.Get(typeof(Tag1), typeof(Tag2), typeof(Tag3));
+            Signature sig4 = Signature.Get(typeof(Tag1), typeof(Tag4), typeof(Tag5));
+
+            Assert.AreEqual(true, sig1.includes(typeof(Tag1)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag2)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag3)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag4)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag5)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag6)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag7)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag8)));
+            Assert.AreEqual(false, sig1.includes(typeof(Tag9)));
+
+            Assert.AreEqual(true, sig2.includes(typeof(Tag1)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag2)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag3)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag4)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag5)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag6)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag7)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag8)));
+            Assert.AreEqual(false, sig2.includes(typeof(Tag9)));
+
+            Assert.AreEqual(true, sig3.includes(typeof(Tag1)));
+            Assert.AreEqual(true, sig3.includes(typeof(Tag2)));
+            Assert.AreEqual(true, sig3.includes(typeof(Tag3)));
+            Assert.AreEqual(false, sig3.includes(typeof(Tag4)));
+            Assert.AreEqual(false, sig3.includes(typeof(Tag5)));
+            Assert.AreEqual(false, sig3.includes(typeof(Tag6)));
+            Assert.AreEqual(false, sig3.includes(typeof(Tag7)));
+            Assert.AreEqual(false, sig3.includes(typeof(Tag8)));
+            Assert.AreEqual(false, sig3.includes(typeof(Tag9)));
+
+            Assert.AreEqual(true, sig4.includes(typeof(Tag1)));
+            Assert.AreEqual(false, sig4.includes(typeof(Tag2)));
+            Assert.AreEqual(false, sig4.includes(typeof(Tag3)));
+            Assert.AreEqual(true, sig4.includes(typeof(Tag4)));
+            Assert.AreEqual(true, sig4.includes(typeof(Tag5)));
+            Assert.AreEqual(false, sig4.includes(typeof(Tag6)));
+            Assert.AreEqual(false, sig4.includes(typeof(Tag7)));
+            Assert.AreEqual(false, sig4.includes(typeof(Tag8)));
+            Assert.AreEqual(false, sig4.includes(typeof(Tag9)));
+        }
+
+        [Test]
         public void EntityMatching()
         {
             Factory.Reset(); //Clear Cache to insure the state of the caches are known

@@ -28,7 +28,41 @@ namespace UberEntityComponentSystem
 
         public void fit(Handle h)
         {
-            if (signature == h.entity && entities.Contains(h) == false) entities.Add(h);
+            if (entities.Contains(h))
+            {
+                //Entity is already in the group
+                if(signature != h.entity)
+                {
+                    //Entity does not match the group anymore
+                    entities.Remove(h);
+                    if (added.Contains(h)) added.Remove(h);
+                    else removed.Add(h);
+                }
+                else
+                {
+                    //Entity does still match check for replace
+                    //Todo: Add code to check for replace
+                    foreach(Type t in h.entity.replaced)
+                    {
+                        if (signature.includes(t))
+                        {
+                            replaced.Add(h);
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Entity is not in the group
+                if (signature == h.entity)
+                {
+                    //Entity matches the group
+                    entities.Add(h);
+                    if (removed.Contains(h)) removed.Remove(h);
+                    else added.Add(h);
+                }
+            }
         }
 
         public int count {
@@ -43,12 +77,24 @@ namespace UberEntityComponentSystem
             return entities.Contains(h);
         }
 
+        public bool contains(Entity e)
+        {
+            return entities.Contains(e.handle);
+        }
+
         public Handle this[int key]
         {
             get
             {
                 return entities[key];
             }
+        }
+
+        internal void increment()
+        {
+            removed.Clear();
+            added.Clear();
+            replaced.Clear();
         }
     }
 }

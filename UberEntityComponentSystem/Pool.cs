@@ -101,7 +101,14 @@ namespace UberEntityComponentSystem
 
         public void incrementGroups()
         {
-            throw new NotImplementedException();
+            foreach (Group g in groups)
+            {
+                g.increment();
+            }
+            foreach (Entity e in entities)
+            {
+                e.increment();
+            }
         }
 
         #endregion //Indexing
