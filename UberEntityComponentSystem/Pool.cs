@@ -99,6 +99,11 @@ namespace UberEntityComponentSystem
             }
         }
 
+        public void incrementGroups()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion //Indexing
     }
 }

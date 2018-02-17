@@ -8,6 +8,10 @@ namespace UberEntityComponentSystem
     public class Group
     {
         private List<Handle> entities = new List<Handle>();
+        public List<Handle> replaced { get; private set; } = new List<Handle>();
+        public List<Handle> added { get; private set; } = new List<Handle>();
+        public List<Handle> removed { get; private set; } = new List<Handle>();
+
         public Pool pool { get; private set; }
 
         public Group(Pool pool, Signature sig)

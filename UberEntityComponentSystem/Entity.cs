@@ -17,6 +17,7 @@ namespace UberEntityComponentSystem
         }
 
         public Pool pool { get; protected set; }
+        public HashSet<Type> replaced { get; private set; } = new HashSet<Type>();
 
         #region Handle
         /// <summary>
@@ -98,7 +99,7 @@ namespace UberEntityComponentSystem
                     component = Factory.Get<T>();
                 component.owner = this;
                 components.Add(typeof(T), component);
-                if(pool != null) pool._updateEntity(this);
+                if (pool != null) pool._updateEntity(this);
                 return component;
             }
             catch (ArgumentException)
@@ -106,6 +107,23 @@ namespace UberEntityComponentSystem
                 throw new ArgumentException("A component with that type already exists in the Entity.");
             }
             throw new Exception("Unknown Error: addComponent<T>");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public T replaceComponent<T>(T component = null) where T : Component, new()
+        {
+            if (component == null)
+                component = Factory.Get<T>();
+            if(null == removeComponent<T>())
+                replaced.Add(typeof(T));
+            component = addComponent<T>(component);
+
+            return component;
         }
 
         /// <summary>
