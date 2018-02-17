@@ -202,7 +202,7 @@ namespace UberEntityComponentSystem.Tests
             DataComponent1 d1 = e1.addComponent<DataComponent1>();
 
             Entity e2 = new Entity();
-            DataComponent2 d2 = e1.addComponent<DataComponent2>();
+            DataComponent2 d2 = e2.addComponent<DataComponent2>();
 
             //Test
             // Check not same
