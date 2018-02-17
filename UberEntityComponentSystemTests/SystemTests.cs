@@ -47,7 +47,6 @@ namespace UberEntityComponentSystem.Tests
         {
             try
             {
-
                 Pool pool = new Pool();
                 UberEntityComponentSystem.Systems sys = new UberEntityComponentSystem.Systems(pool).add(new SetupSys());
             }
@@ -185,6 +184,7 @@ namespace UberEntityComponentSystem.Tests
 
         #region Feature Tests
         [Test]
+        [Ignore("Don't know how I want to handle this.")]
         public void Features()
         {
         }

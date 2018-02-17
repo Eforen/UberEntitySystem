@@ -199,18 +199,36 @@ namespace UberEntityComponentSystem.Tests
             //Setup
             //Init both entities
             Entity e1 = new Entity();
-            DataComponent1 d1 = new DataComponent1();
-            e1.addComponent(d1);
+            DataComponent1 d1 = e1.addComponent<DataComponent1>();
 
             Entity e2 = new Entity();
-            DataComponent2 d2 = new DataComponent2();
-            e2.addComponent(d2);
+            DataComponent2 d2 = e1.addComponent<DataComponent2>();
 
             //Test
             // Check not same
             Assert.AreSame(d1, e1.getComponent<DataComponent1>());
 
             Assert.AreSame(d2, e2.getComponent<DataComponent2>());
+        }
+
+        [Test]
+        public void ReplaceComponents()
+        {
+            //Setup
+            //Init both entities
+            Entity e1 = new Entity();
+            DataComponent1 d1 = e1.addComponent<DataComponent1>();
+            DataComponent1 d12 = e1.replaceComponent<DataComponent1>();
+
+            Entity e2 = new Entity();
+            DataComponent2 d2 = e1.addComponent<DataComponent2>();
+            DataComponent2 d22 = e1.replaceComponent<DataComponent2>();
+
+            //Test
+            // Check not same
+            Assert.AreSame(d12, e1.getComponent<DataComponent1>());
+
+            Assert.AreSame(d22, e2.getComponent<DataComponent2>());
         }
 
         [Test]
@@ -391,6 +409,30 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreSame(d1, e1.getComponent(typeof(DataComponent1)));
 
             Assert.AreSame(d2, e2.getComponent(typeof(DataComponent2)));
+        }
+
+        [Test]
+        public void ReplaceComponentsTypeParam()
+        {
+            //Setup
+            //Init both entities
+            Entity e1 = new Entity();
+            DataComponent1 d1 = new DataComponent1();
+            DataComponent1 d12 = new DataComponent1();
+            e1.addComponent(d1);
+            e1.replaceComponent(d12);
+
+            Entity e2 = new Entity();
+            DataComponent2 d2 = new DataComponent2();
+            DataComponent2 d22 = new DataComponent2();
+            e2.addComponent(d2);
+            e2.replaceComponent(d22);
+
+            //Test
+            // Check not same
+            Assert.AreSame(d12, e1.getComponent(typeof(DataComponent1)));
+
+            Assert.AreSame(d22, e2.getComponent(typeof(DataComponent2)));
         }
 
         [Test]

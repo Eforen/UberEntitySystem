@@ -218,9 +218,1043 @@ namespace UberEntityComponentSystem.Tests
             Assert.AreEqual(1, g6.count); // Tag1, Component2
         }
 
-
-
         #endregion //Entity
 
+        #region Add Entity
+
+        [Test]
+        public void WhenAddedEntityIsInAddedList()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+            
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+
+            Assert.AreEqual(true, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(true, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(true, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(false, g2.added.has(e2));
+            Assert.AreEqual(false, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(false, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+
+
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+
+            Assert.AreEqual(true, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(true, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(true, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(true, g2.added.has(e2));
+            Assert.AreEqual(true, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(true, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+
+
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            Assert.AreEqual(true, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(true, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(true, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(true, g2.added.has(e2));
+            Assert.AreEqual(true, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(true, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(true, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(true, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(true, g8.added.has(e3));
+        }
+        [Test]
+        public void WhenGroupIsSteppedAddedListIsCleared()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+            
+            Assert.AreEqual(true, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(true, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(true, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(false, g2.added.has(e2));
+            Assert.AreEqual(false, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(false, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(false, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(false, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(false, g2.added.has(e2));
+            Assert.AreEqual(false, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(false, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+
+            Assert.AreEqual(false, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(false, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(false, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+            
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(true, g2.added.has(e2));
+            Assert.AreEqual(true, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(true, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(false, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(false, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(false, g2.added.has(e2));
+            Assert.AreEqual(false, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(false, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            Assert.AreEqual(false, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(false, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(false, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(false, g2.added.has(e2));
+            Assert.AreEqual(false, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(false, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(true, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(true, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(true, g8.added.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.added.has(e1));
+            Assert.AreEqual(false, g2.added.has(e1));
+            Assert.AreEqual(false, g3.added.has(e1));
+            Assert.AreEqual(false, g4.added.has(e1));
+            Assert.AreEqual(false, g5.added.has(e1));
+            Assert.AreEqual(false, g6.added.has(e1));
+            Assert.AreEqual(false, g7.added.has(e1));
+            Assert.AreEqual(false, g8.added.has(e1));
+
+            Assert.AreEqual(false, g1.added.has(e2));
+            Assert.AreEqual(false, g2.added.has(e2));
+            Assert.AreEqual(false, g3.added.has(e2));
+            Assert.AreEqual(false, g4.added.has(e2));
+            Assert.AreEqual(false, g5.added.has(e2));
+            Assert.AreEqual(false, g6.added.has(e2));
+            Assert.AreEqual(false, g7.added.has(e2));
+            Assert.AreEqual(false, g8.added.has(e2));
+
+            Assert.AreEqual(false, g1.added.has(e3));
+            Assert.AreEqual(false, g2.added.has(e3));
+            Assert.AreEqual(false, g3.added.has(e3));
+            Assert.AreEqual(false, g4.added.has(e3));
+            Assert.AreEqual(false, g5.added.has(e3));
+            Assert.AreEqual(false, g6.added.has(e3));
+            Assert.AreEqual(false, g7.added.has(e3));
+            Assert.AreEqual(false, g8.added.has(e3));
+        }
+        #endregion //Add Entity
+
+
+        #region Remove Entity
+        [Test]
+        public void WhenRemovedEntityIsInRemovedList()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            pool.incrementGroups();
+
+            e1.removeComponent<Component1>();
+            e1.unsetTag<Tag1>();
+
+            Assert.AreEqual(true, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(true, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(true, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+
+
+            e2.unsetTag<Tag2>();
+            e2.removeComponent<Component1>();
+
+            Assert.AreEqual(true, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(true, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(true, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(true, g2.removed.has(e2));
+            Assert.AreEqual(true, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(true, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+
+
+            e3.unsetTag<Tag1>();
+            e3.removeComponent<Component2>();
+
+            Assert.AreEqual(true, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(true, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(true, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(true, g2.removed.has(e2));
+            Assert.AreEqual(true, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(true, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(true, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(true, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(true, g8.removed.has(e3));
+        }
+        [Test]
+        public void WhenGroupIsSteppedRemovedListIsCleared()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            pool.incrementGroups();
+
+            e1.removeComponent<Component1>();
+            e1.unsetTag<Tag1>();
+
+            Assert.AreEqual(true, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(true, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(true, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(false, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(false, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+
+            e2.unsetTag<Tag2>();
+            e2.removeComponent<Component1>();
+
+            Assert.AreEqual(false, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(false, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(false, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(true, g2.removed.has(e2));
+            Assert.AreEqual(true, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(true, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(false, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(false, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+
+            e3.unsetTag<Tag1>();
+            e3.removeComponent<Component2>();
+
+            Assert.AreEqual(false, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(false, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(false, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(true, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(true, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(true, g8.removed.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(false, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(false, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+        }
+        #endregion //Remove Entity
+
+        #region Null Change Entity
+        [Test]
+        public void WhenAddedAndRemovedNotInAnyLists()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            e1.removeComponent<Component1>();
+            e1.unsetTag<Tag1>();
+            e2.unsetTag<Tag2>();
+            e2.removeComponent<Component1>();
+            e3.unsetTag<Tag1>();
+            e3.removeComponent<Component2>();
+
+            Assert.AreEqual(false, g1.removed.has(e1));
+            Assert.AreEqual(false, g2.removed.has(e1));
+            Assert.AreEqual(false, g3.removed.has(e1));
+            Assert.AreEqual(false, g4.removed.has(e1));
+            Assert.AreEqual(false, g5.removed.has(e1));
+            Assert.AreEqual(false, g6.removed.has(e1));
+            Assert.AreEqual(false, g7.removed.has(e1));
+            Assert.AreEqual(false, g8.removed.has(e1));
+
+            Assert.AreEqual(false, g1.removed.has(e2));
+            Assert.AreEqual(false, g2.removed.has(e2));
+            Assert.AreEqual(false, g3.removed.has(e2));
+            Assert.AreEqual(false, g4.removed.has(e2));
+            Assert.AreEqual(false, g5.removed.has(e2));
+            Assert.AreEqual(false, g6.removed.has(e2));
+            Assert.AreEqual(false, g7.removed.has(e2));
+            Assert.AreEqual(false, g8.removed.has(e2));
+
+            Assert.AreEqual(false, g1.removed.has(e3));
+            Assert.AreEqual(false, g2.removed.has(e3));
+            Assert.AreEqual(false, g3.removed.has(e3));
+            Assert.AreEqual(false, g4.removed.has(e3));
+            Assert.AreEqual(false, g5.removed.has(e3));
+            Assert.AreEqual(false, g6.removed.has(e3));
+            Assert.AreEqual(false, g7.removed.has(e3));
+            Assert.AreEqual(false, g8.removed.has(e3));
+        }
+        #endregion //Null Change Entity
+        #region Replaced Entity
+        [Test]
+        public void WhenReplacedEntityIsInReplacedList()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            pool.incrementGroups();
+
+            e1.removeComponent<Component1>();
+            e1.unsetTag<Tag1>();
+
+            Assert.AreEqual(true, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(true, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(true, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(false, g2.replaced.has(e2));
+            Assert.AreEqual(false, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(false, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+
+
+            e2.unsetTag<Tag2>();
+            e2.removeComponent<Component1>();
+
+            Assert.AreEqual(true, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(true, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(true, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(true, g2.replaced.has(e2));
+            Assert.AreEqual(true, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(true, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+
+
+            e3.unsetTag<Tag1>();
+            e3.removeComponent<Component2>();
+
+            Assert.AreEqual(true, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(true, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(true, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(true, g2.replaced.has(e2));
+            Assert.AreEqual(true, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(true, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(true, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(true, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(true, g8.replaced.has(e3));
+        }
+        [Test]
+        public void WhenGroupIsSteppedReplacedListIsCleared()
+        {
+            //Setup
+            //Init both entities
+            Pool pool = new Pool();
+
+            Group g1 = pool.getGroup(Signature.Get(typeof(Tag1)));
+            Group g2 = pool.getGroup(Signature.Get(typeof(Tag2)));
+            Group g3 = pool.getGroup(Signature.Get(typeof(Component1)));
+            Group g4 = pool.getGroup(Signature.Get(typeof(Component2)));
+            Group g5 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component1)));
+            Group g6 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component2)));
+            Group g7 = pool.getGroup(Signature.Get(typeof(Tag2), typeof(Component1)));
+            Group g8 = pool.getGroup(Signature.Get(typeof(Tag1), typeof(Component2)));
+
+            Entity e1 = pool.newEntity;
+            Entity e2 = pool.newEntity;
+            Entity e3 = pool.newEntity;
+
+            e1.addComponent<Component1>();
+            e1.setTag<Tag1>();
+            e2.setTag<Tag2>();
+            e2.addComponent<Component1>();
+            e3.setTag<Tag1>();
+            e3.addComponent<Component2>();
+
+            pool.incrementGroups();
+
+            e1.removeComponent<Component1>();
+            e1.unsetTag<Tag1>();
+
+            Assert.AreEqual(true, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(true, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(true, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(false, g2.replaced.has(e2));
+            Assert.AreEqual(false, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(false, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(false, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(false, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(false, g2.replaced.has(e2));
+            Assert.AreEqual(false, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(false, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+
+            e2.unsetTag<Tag2>();
+            e2.removeComponent<Component1>();
+
+            Assert.AreEqual(false, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(false, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(false, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(true, g2.replaced.has(e2));
+            Assert.AreEqual(true, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(true, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(false, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(false, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(false, g2.replaced.has(e2));
+            Assert.AreEqual(false, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(false, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+
+            e3.unsetTag<Tag1>();
+            e3.removeComponent<Component2>();
+
+            Assert.AreEqual(false, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(false, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(false, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(false, g2.replaced.has(e2));
+            Assert.AreEqual(false, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(false, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(true, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(true, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(true, g8.replaced.has(e3));
+
+            pool.incrementGroups();
+
+            Assert.AreEqual(false, g1.replaced.has(e1));
+            Assert.AreEqual(false, g2.replaced.has(e1));
+            Assert.AreEqual(false, g3.replaced.has(e1));
+            Assert.AreEqual(false, g4.replaced.has(e1));
+            Assert.AreEqual(false, g5.replaced.has(e1));
+            Assert.AreEqual(false, g6.replaced.has(e1));
+            Assert.AreEqual(false, g7.replaced.has(e1));
+            Assert.AreEqual(false, g8.replaced.has(e1));
+
+            Assert.AreEqual(false, g1.replaced.has(e2));
+            Assert.AreEqual(false, g2.replaced.has(e2));
+            Assert.AreEqual(false, g3.replaced.has(e2));
+            Assert.AreEqual(false, g4.replaced.has(e2));
+            Assert.AreEqual(false, g5.replaced.has(e2));
+            Assert.AreEqual(false, g6.replaced.has(e2));
+            Assert.AreEqual(false, g7.replaced.has(e2));
+            Assert.AreEqual(false, g8.replaced.has(e2));
+
+            Assert.AreEqual(false, g1.replaced.has(e3));
+            Assert.AreEqual(false, g2.replaced.has(e3));
+            Assert.AreEqual(false, g3.replaced.has(e3));
+            Assert.AreEqual(false, g4.replaced.has(e3));
+            Assert.AreEqual(false, g5.replaced.has(e3));
+            Assert.AreEqual(false, g6.replaced.has(e3));
+            Assert.AreEqual(false, g7.replaced.has(e3));
+            Assert.AreEqual(false, g8.replaced.has(e3));
+        }
+        #endregion //Replace Entity
     }
 }
